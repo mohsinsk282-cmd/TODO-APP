@@ -3,28 +3,24 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: [UNVERSIONED] → 1.0.0
-Type: MAJOR (initial constitution ratification)
+Version Change: 1.0.0 → 1.1.0
+Type: MINOR (Added Reusable Intelligence principle)
 
 Modified Principles:
-- NEW: I. SDD-RI Methodology (Spec-Driven Development with Rigorous Implementation)
-- NEW: II. Pythonic Excellence
-- NEW: III. In-Memory State Management
-- NEW: IV. Type Safety & Documentation
-- NEW: V. Terminal-Based Verification
+- ADDED: VI. Reusable Intelligence (Agent Skills)
 
-Added Sections:
-- Technology Stack
-- Quality Standards
-- Success Criteria
-- Governance
+Modified Sections:
+- Success Criteria: Added "Skill Extraction" requirement
+- Governance: Updated review schedule to include Skills audit
 
 Templates Requiring Updates:
-- ✅ .specify/templates/plan-template.md (constitution check section aligns)
-- ✅ .specify/templates/spec-template.md (requirements format compatible)
+- ⚠ .specify/templates/plan-template.md (may need Agent Skills section)
+- ⚠ .specify/templates/spec-template.md (may reference extracted patterns)
 - ✅ .specify/templates/tasks-template.md (task structure compatible)
 
-Follow-up TODOs: None
+Follow-up TODOs:
+- Create Agent Skills library directory structure
+- Extract 3+ patterns from Phase I implementation
 -->
 
 ## Core Principles
@@ -96,6 +92,24 @@ Interaction model:
 
 **Rationale**: Terminal interaction is the simplest, most direct way to verify logic. It eliminates UI complexity and allows focus on core functionality. Testing is straightforward with command-line tools.
 
+### VI. Reusable Intelligence (Agent Skills)
+
+**MANDATORY**: All repeatable architectural patterns MUST be extracted and formalized as Agent Skills.
+
+Pattern Extraction Requirements:
+- Identify recurring design patterns during implementation (e.g., ID management, CLI formatting, error handling)
+- Extract patterns into the project's skill library with clear documentation
+- Each skill MUST include: purpose, usage examples, constraints, and rationale
+- Skills MUST be language-agnostic where possible, implementation-specific where necessary
+
+Subagent Governance:
+- Any subagent created during development MUST adhere to this Constitution
+- Subagents MUST utilize established Agent Skills to maintain consistency
+- New patterns discovered by subagents MUST be proposed for skill library inclusion
+- Skills MUST be version-controlled alongside code artifacts
+
+**Rationale**: Capturing architectural patterns as reusable skills prevents reinventing solutions, ensures consistency across features, and accelerates development. Subagent governance ensures all development—human or AI-driven—follows established best practices.
+
 ## Technology Stack
 
 **Language**: Python 3.13+
@@ -165,6 +179,11 @@ Phase I is considered complete when ALL of the following are met:
    - Task list complete with all tasks checked off
    - Code is self-documenting via docstrings
 
+6. **Skill Extraction**: At least 3 Agent Skills formalized and stored in the project library:
+   - Skills MUST document recurring patterns from Phase I
+   - Each skill MUST include purpose, usage, constraints, and examples
+   - Skills MUST be validated against actual implementation
+
 ## Governance
 
 **Authority**: This constitution supersedes all other development practices and preferences for this project.
@@ -183,6 +202,6 @@ Phase I is considered complete when ALL of the following are met:
    - **MINOR**: New principles or sections added
    - **PATCH**: Clarifications, wording improvements, typo fixes
 
-**Review Schedule**: Constitution SHOULD be reviewed at phase boundaries (Phase I → Phase II transition, etc.)
+**Review Schedule**: Constitution MUST be reviewed at phase boundaries (Phase I → Phase II transition, etc.), including the audit of extracted Skills to ensure they remain relevant and are being utilized.
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-07 | **Last Amended**: 2026-01-07
+**Version**: 1.1.0 | **Ratified**: 2026-01-07 | **Last Amended**: 2026-01-09
