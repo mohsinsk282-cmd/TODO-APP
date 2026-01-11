@@ -138,7 +138,7 @@ Core Principles:
 
 ## License
 
-[Add your license here]
+[]
 
 ## Author
 

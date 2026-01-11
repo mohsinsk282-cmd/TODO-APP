@@ -1,26 +1,34 @@
-# Todo In-Memory Python Console App Constitution
+# Todo Full-Stack Web Application Constitution
 
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: 1.0.0 → 1.1.0
-Type: MINOR (Added Reusable Intelligence principle)
+Version Change: 1.1.0 → 2.0.0
+Type: MAJOR (Transition to Full-Stack Web Architecture)
 
 Modified Principles:
-- ADDED: VI. Reusable Intelligence (Agent Skills)
+- REPLACED: III. In-Memory State Management → III. Persistent Relational State
+- ADDED: VII. Stateless Security (JWT Authentication)
 
 Modified Sections:
-- Success Criteria: Added "Skill Extraction" requirement
-- Governance: Updated review schedule to include Skills audit
+- Technology Stack: Complete overhaul for web architecture
+  - Frontend: Next.js 16+ (App Router), Tailwind CSS
+  - Backend: Python 3.13+, FastAPI
+  - Database: Neon Serverless PostgreSQL with SQLModel ORM
+  - Auth: Better Auth with JWT
+- Success Criteria: Added Phase II criteria for web application
+- Title: Updated from "Python Console App" to "Full-Stack Web Application"
 
 Templates Requiring Updates:
-- ⚠ .specify/templates/plan-template.md (may need Agent Skills section)
-- ⚠ .specify/templates/spec-template.md (may reference extracted patterns)
-- ✅ .specify/templates/tasks-template.md (task structure compatible)
+- ⚠ .specify/templates/plan-template.md (add database schema, API design, auth flow sections)
+- ⚠ .specify/templates/spec-template.md (add API endpoints, auth requirements, UI wireframes)
+- ⚠ .specify/templates/tasks-template.md (add frontend, backend, database, auth task categories)
 
 Follow-up TODOs:
-- Create Agent Skills library directory structure
-- Extract 3+ patterns from Phase I implementation
+- Review Agent Skills (id_architect, ux_logic_anchor, error_handler) for web context applicability
+- Create database migration strategy from in-memory Phase I data
+- Define API versioning and endpoint naming conventions
+- Establish JWT token lifecycle and refresh policies
 -->
 
 ## Core Principles
@@ -50,22 +58,23 @@ Code quality requirements:
 
 **Rationale**: Consistency and readability are critical for maintainability. Python 3.13+ provides powerful features that improve code clarity and type safety.
 
-### III. In-Memory State Management
+### III. Persistent Relational State
 
-**STRICT CONSTRAINT**: No persistence layer during Phase I. All data MUST reside in memory.
+**MANDATORY**: All application data MUST be stored in Neon Serverless PostgreSQL with strict data isolation.
 
-Prohibited in Phase I:
-- File I/O (JSON, CSV, text files)
-- Database connections (SQLite, PostgreSQL, etc.)
-- External storage APIs
-- Serialization for persistence purposes
+Technology Requirements:
+- Database: Neon Serverless PostgreSQL
+- ORM: SQLModel (combines SQLAlchemy and Pydantic)
+- Schema: All entities MUST include a `user_id` foreign key for data isolation
+- Migrations: Use Alembic for database schema versioning
 
-Required:
-- Clean data structures (classes or dictionaries)
-- Proper encapsulation of state
-- Zero global variables
+Data Isolation Rules:
+- Every entity table MUST have a `user_id` column (foreign key to users table)
+- Query filters MUST enforce `WHERE user_id = {authenticated_user_id}`
+- Cross-user data access is strictly prohibited
+- Database constraints MUST prevent orphaned records
 
-**Rationale**: Phase I focuses exclusively on business logic and state management. Adding persistence introduces complexity that obscures the core logic. Persistence will be addressed in a future phase after logic is proven correct.
+**Rationale**: Persistent storage enables multi-user web applications with data durability. User-level isolation ensures security and privacy. SQLModel provides type-safe database operations aligned with Principle II (Pythonic Excellence).
 
 ### IV. Type Safety & Documentation
 
@@ -82,15 +91,15 @@ Requirements:
 
 ### V. Terminal-Based Verification
 
-**REQUIREMENT**: All logic MUST be verifiable via terminal output. No GUI, no web interface.
+**REQUIREMENT**: All backend logic MUST be verifiable via terminal output or API testing tools.
 
 Interaction model:
-- Input via CLI (stdin, command-line arguments)
-- Output via terminal (stdout for results, stderr for errors)
-- Human-readable output format
-- Clear success/failure indicators
+- Backend: REST API endpoints testable with curl, HTTPie, or Postman
+- Output via structured JSON responses
+- Clear HTTP status codes (200, 400, 401, 404, 500)
+- Human-readable error messages
 
-**Rationale**: Terminal interaction is the simplest, most direct way to verify logic. It eliminates UI complexity and allows focus on core functionality. Testing is straightforward with command-line tools.
+**Rationale**: API-first design ensures backend logic is decoupled from frontend presentation. Terminal/HTTP testing enables rapid verification without UI dependencies.
 
 ### VI. Reusable Intelligence (Agent Skills)
 
@@ -110,79 +119,139 @@ Subagent Governance:
 
 **Rationale**: Capturing architectural patterns as reusable skills prevents reinventing solutions, ensures consistency across features, and accelerates development. Subagent governance ensures all development—human or AI-driven—follows established best practices.
 
+### VII. Stateless Security (JWT Authentication)
+
+**MANDATORY**: All API requests MUST be authenticated with a valid JWT token verified against BETTER_AUTH_SECRET.
+
+Authentication Requirements:
+- No request shall be processed without a valid JWT token (except public auth endpoints)
+- JWT tokens MUST be verified using the `BETTER_AUTH_SECRET` environment variable
+- Token payload MUST include `user_id` claim for identity verification
+- Token expiration MUST be enforced (reject expired tokens with 401 Unauthorized)
+
+Authorization Requirements:
+- Backend MUST verify that the requested resource ID belongs to the authenticated user ID
+- Ownership validation pattern: `SELECT * FROM table WHERE id = {resource_id} AND user_id = {token_user_id}`
+- Cross-user resource access MUST return 404 Not Found (not 403, to prevent information leakage)
+- Admin/service accounts require explicit role claim in JWT payload
+
+**Rationale**: JWT provides stateless authentication suitable for serverless backends. Ownership verification at the database layer prevents unauthorized data access. Returning 404 for forbidden resources prevents attackers from enumerating valid resource IDs.
+
 ## Technology Stack
 
-**Language**: Python 3.13+
+### Frontend
+- **Framework**: Next.js 16+ (App Router)
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript 5+
+- **State Management**: React Context or Zustand (as needed)
 
-**Dependency Management**: UV (fast Python package installer and resolver)
+### Backend
+- **Language**: Python 3.13+
+- **Framework**: FastAPI
+- **ORM**: SQLModel
+- **Database**: Neon Serverless PostgreSQL
+- **Migrations**: Alembic
 
-**Development Tools**:
-- Type checking: `mypy` or `pyright`
-- Linting: `ruff` or `pylint`
-- Formatting: `black` or `ruff format`
+### Authentication
+- **Provider**: Better Auth
+- **Mechanism**: JWT tokens with `BETTER_AUTH_SECRET` signature verification
+- **Token Storage**: HTTP-only cookies (frontend) + Authorization header (API)
 
-**Testing** (when applicable):
-- Framework: `pytest`
-- Coverage: `pytest-cov`
+### Development Tools
+- **Backend**:
+  - Type checking: `mypy --strict`
+  - Linting: `ruff check`
+  - Formatting: `ruff format`
+  - Dependency Management: UV
+
+- **Frontend**:
+  - Type checking: Built-in TypeScript compiler
+  - Linting: ESLint with Next.js config
+  - Formatting: Prettier
+
+### Testing
+- **Backend**: `pytest` with `pytest-cov` for coverage
+- **Frontend**: Jest + React Testing Library
+- **E2E**: Playwright (optional for Phase II)
 
 ## Quality Standards
 
 ### Code Quality
-- All code passes `ruff check` (or equivalent linter) with zero warnings
-- All code passes type checking with `mypy --strict` (or equivalent)
-- All code formatted with `black` (or equivalent)
+- All code passes linter checks with zero warnings (ruff for Python, ESLint for TypeScript)
+- All code passes type checking (mypy --strict for Python, tsc --noEmit for TypeScript)
+- All code formatted consistently (ruff format for Python, Prettier for TypeScript)
 - No commented-out code in final commits
-- No debug print statements in production code
+- No debug print/console statements in production code
 
 ### Documentation Quality
 - Every module has a module-level docstring
 - Every class has a class-level docstring
 - Every public function has a complete docstring
 - Complex algorithms include inline comments explaining logic
+- API endpoints documented in OpenAPI/Swagger format (FastAPI auto-generates)
 
 ### Testing Quality
 - All business logic has corresponding test cases
 - Edge cases are explicitly tested
-- Error paths are tested
+- Error paths are tested (400, 401, 404, 500 responses)
 - Test output clearly indicates pass/fail
+- Database integration tests use transactional rollbacks (no persistent test data)
+
+### Security Quality
+- All secrets stored in environment variables (never committed to git)
+- JWT tokens validated on every protected endpoint
+- SQL injection prevented via ORM parameterized queries
+- CORS configured correctly (whitelist frontend origin)
+- Rate limiting implemented on auth endpoints
 
 ## Success Criteria
 
+### Phase I (COMPLETE)
 Phase I is considered complete when ALL of the following are met:
 
-1. **Feature Completeness**: All Basic Level features are implemented:
-   - Add todo item
-   - Delete todo item
-   - Update todo item
-   - View all todo items
-   - Mark todo item as complete
+1. **Feature Completeness**: All Basic Level features implemented in CLI
+2. **Code Quality**: 100% PEP 8 compliance, type hints, docstrings, zero linting errors
+3. **Functional Correctness**: All features work as specified, edge cases handled
+4. **Verification**: All functionality demonstrable via terminal
+5. **Documentation**: Specification, plan, tasks complete and approved
+6. **Skill Extraction**: 3 Agent Skills formalized (id_architect, ux_logic_anchor, error_handler)
 
-2. **Code Quality**:
-   - 100% compliance with PEP 8
-   - 100% type hint coverage
-   - 100% docstring coverage
-   - Zero linting errors
+### Phase II (In Progress)
+Phase II is considered complete when ALL of the following are met:
 
-3. **Functional Correctness**:
-   - All features work as specified
-   - Edge cases handled gracefully
-   - No runtime errors during normal operation
+1. **Secure REST API**: Full CRUD functionality with JWT authentication
+   - All endpoints require valid JWT tokens
+   - User data isolation enforced at database level
+   - Proper HTTP status codes (200, 400, 401, 404, 500)
+   - OpenAPI documentation generated
 
-4. **Verification**:
-   - All functionality demonstrable via terminal
-   - Clear output for all operations
-   - Intuitive command-line interface
+2. **Responsive Next.js UI**: Functional web interface using established UX patterns
+   - Landing page with authentication (login/signup)
+   - Todo list view with status symbols ([✓] completed, [○] pending)
+   - Add, edit, delete, toggle completion actions
+   - Standardized success/error messages (leveraging UX Logic Anchor skill)
+   - Mobile-responsive design (Tailwind CSS)
 
-5. **Documentation**:
-   - Specification document complete and approved
-   - Implementation plan complete and approved
-   - Task list complete with all tasks checked off
-   - Code is self-documenting via docstrings
+3. **Successful JWT Handshake**: Frontend and backend authentication integration
+   - Login flow: credentials → Better Auth → JWT token → HTTP-only cookie
+   - API requests include Authorization header or cookie
+   - Backend validates JWT signature using BETTER_AUTH_SECRET
+   - Token expiration handled gracefully (redirect to login on 401)
 
-6. **Skill Extraction**: At least 3 Agent Skills formalized and stored in the project library:
-   - Skills MUST document recurring patterns from Phase I
-   - Each skill MUST include purpose, usage, constraints, and examples
-   - Skills MUST be validated against actual implementation
+4. **Database Integration**: Neon PostgreSQL with SQLModel ORM
+   - All entities have `user_id` foreign key
+   - Database migrations managed with Alembic
+   - Connection pooling configured for serverless environment
+
+5. **Code Quality**: Maintains Phase I standards across frontend and backend
+   - Zero linting/type errors in both Python and TypeScript
+   - Comprehensive docstrings/comments
+   - No hardcoded secrets (environment variables only)
+
+6. **Testing**: Backend API tests with >80% coverage
+   - Unit tests for business logic
+   - Integration tests for database operations
+   - Authentication/authorization tests (valid/invalid tokens, ownership checks)
 
 ## Governance
 
@@ -198,10 +267,10 @@ Phase I is considered complete when ALL of the following are met:
 2. Amendment MUST be reviewed and approved
 3. Amendment MUST include migration plan for existing code if applicable
 4. Version number MUST be incremented according to semantic versioning:
-   - **MAJOR**: Backward-incompatible changes (principle removal/redefinition)
+   - **MAJOR**: Backward-incompatible changes (principle removal/redefinition, architecture shift)
    - **MINOR**: New principles or sections added
    - **PATCH**: Clarifications, wording improvements, typo fixes
 
 **Review Schedule**: Constitution MUST be reviewed at phase boundaries (Phase I → Phase II transition, etc.), including the audit of extracted Skills to ensure they remain relevant and are being utilized.
 
-**Version**: 1.1.0 | **Ratified**: 2026-01-07 | **Last Amended**: 2026-01-09
+**Version**: 2.0.0 | **Ratified**: 2026-01-07 | **Last Amended**: 2026-01-11
