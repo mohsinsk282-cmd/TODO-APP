@@ -1,29 +1,46 @@
-# FastAPI REST API Dependencies
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
-
-# Database ORM
-sqlmodel>=0.0.14
-
-# JWT Authentication
-pyjwt>=2.8.0
-
-# Environment Variables
-python-dotenv>=1.0.0
-
-# PostgreSQL Driver (inherited from 002-database-schema)
-psycopg2-binary>=2.9.0
-
-# Database Migrations (inherited from 002-database-schema)
-alembic>=1.13.0
-
-# Testing
-pytest>=7.4.0
-pytest-cov>=4.1.0
-httpx>=0.25.0
-
-# Type Checking
-mypy>=1.7.0
-
-# Linting and Formatting
-ruff>=0.1.0
+alembic==1.18.0
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.12.1
+certifi==2026.1.4
+cffi==2.0.0
+click==8.3.1
+coverage==7.13.1
+cryptography==46.0.3
+ecdsa==0.19.1
+fastapi==0.128.0
+greenlet==3.3.0
+h11==0.16.0
+httpcore==1.0.9
+httptools==0.7.1
+httpx==0.28.1
+idna==3.11
+iniconfig==2.3.0
+mako==1.3.10
+markupsafe==3.0.3
+packaging==25.0
+pluggy==1.6.0
+psycopg2-binary==2.9.11
+pyasn1==0.6.1
+pycparser==2.23
+pydantic==2.12.5
+pydantic-core==2.41.5
+pydantic-settings==2.12.0
+pygments==2.19.2
+pyjwt==2.10.1
+pytest==9.0.2
+pytest-cov==7.0.0
+python-dotenv==1.2.1
+python-jose==3.5.0
+pyyaml==6.0.3
+rsa==4.9.1
+six==1.17.0
+sqlalchemy==2.0.45
+sqlmodel==0.0.31
+starlette==0.45.3
+typing-extensions==4.15.0
+typing-inspection==0.4.2
+uvicorn==0.40.0
+uvloop==0.22.1
+watchfiles==1.1.1
+websockets==16.0
