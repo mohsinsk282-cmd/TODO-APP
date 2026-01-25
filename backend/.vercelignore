@@ -1,0 +1,22 @@
+# Environment files
+.env
+.env.*
+.venv
+__pycache__
+
+# Testing
+tests/
+.pytest_cache/
+API_TESTING_GUIDE.md
+
+# Local temp files
+=1.0.0
+=8.0.0
+
+# UV / Dependency management
+uv.lock
+pyproject.toml
+
+# Others
+*.pyc
+*.pyo

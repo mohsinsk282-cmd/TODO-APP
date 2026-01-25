@@ -22,10 +22,15 @@ import postgres from "postgres";
 const sql = postgres(process.env.DATABASE_URL!, {
   max: 10, // Connection pool size
   ssl: "require", // Neon requires SSL
-  idle_timeout: 20, // 20 seconds idle timeout
+  idle_timeout: 60, // Increased idle timeout
   max_lifetime: 60 * 30, // 30 minutes max connection lifetime
-  connect_timeout: 60, // 60 seconds connection timeout (for cold starts)
+  connect_timeout: 120, // 120 seconds connection timeout (for cold starts)
+  keep_alive: 30, // Keep Alive every 30 seconds
 });
+
+// Test connection
+sql`SELECT 1`.then(() => console.log("Database connected successfully"))
+  .catch((err) => console.error("Database connection failed:", err));
 
 // Create Kysely instance
 const db = new Kysely({
