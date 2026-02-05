@@ -64,3 +64,7 @@ coverage.xml
 
 # Private Documentation
 backend/API_TESTING_GUIDE.md
+
+
+# chatbot-backend folder
+chatbot-backend/tests
